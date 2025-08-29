@@ -1,0 +1,20 @@
+.values .cardtwo {
+  background-color: rgb(255, 255, 255);  
+  padding: 30px;
+  box-shadow: 0px 0 5px rgba(1, 41, 112, 0.08);
+  text-align: center;
+  transition: 0.3s;
+  height: 100%;
+}
+
+.values .cardtwo h3 {
+  font-size: 24px;
+  color: #000000;
+  font-weight: 700;
+  margin-bottom: 18px;
+}
+
+.values .cardtwo:hover {
+  box-shadow: 0px 0 30px rgba(0, 0, 0, 0.107);
+}
+
