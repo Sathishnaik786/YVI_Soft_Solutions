@@ -1,24 +1,304 @@
-# Logs
-logs
-*.log
+# YVI Soft Solutions - Comprehensive .gitignore
+# React + Vite + PHP + MySQL Project
+
+# ========================================
+# Node.js / NPM / Yarn
+# ========================================
+node_modules/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+.npm
+.yarn-integrity
 
-node_modules
-dist
-dist-ssr
+# ========================================
+# Vite / Build Output
+# ========================================
+dist/
+dist-ssr/
+build/
+out/
 *.local
+.cache/
+.parcel-cache/
+.vite/
 
-# Editor directories and files
+# ========================================
+# Development Logs
+# ========================================
+logs/
+*.log
+error.log
+access.log
+
+# ========================================
+# Environment Variables & Config
+# ========================================
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env.*.local
+config.php
+db_config.php
+email_config.php
+
+# ========================================
+# PHP Specific
+# ========================================
+vendor/
+composer.lock
+*.php~
+*.phps
+.phpunit.result.cache
+phpunit.xml
+
+# ========================================
+# Database
+# ========================================
+*.sql
+*.sqlite
+*.sqlite3
+*.db
+database.json
+*.backup
+*.dump
+
+# ========================================
+# IDE / Editor Files
+# ========================================
+# Visual Studio Code
 .vscode/*
 !.vscode/extensions.json
-.idea
-.DS_Store
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+
+# Visual Studio
+.vs/
 *.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
+*.user
+*.userosscache
+*.sln.docstates
+*.vcxproj.filters
+*.vcxproj.user
+
+# JetBrains IDEs
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# Vim
+*.swp
+*.swo
+*~
+
+# Emacs
+*~
+\#*\#
+/.emacs.desktop
+/.emacs.desktop.lock
+*.elc
+
+# ========================================
+# Operating System Files
+# ========================================
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+*.stackdump
+[Dd]esktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
+*.lnk
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+._*
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+# Linux
+*~
+.fuse_hidden*
+.directory
+.Trash-*
+.nfs*
+
+# ========================================
+# Temporary & Cache Files
+# ========================================
+tmp/
+temp/
+*.tmp
+*.temp
+*.cache
+.sass-cache/
+.eslintcache
+.stylelintcache
+.rpt2_cache/
+.rts2_cache_cjs/
+.rts2_cache_es/
+.rts2_cache_umd/
+
+# ========================================
+# Testing & Coverage
+# ========================================
+coverage/
+*.lcov
+.nyc_output/
+.coverage
+.pytest_cache/
+unit-test-reports/
+test-results/
+*.spec.js
+*.test.js
+
+# ========================================
+# Documentation & Backup Files
+# ========================================
+*.backup
+*.bak
+*.old
+*.orig
+*.rej
+*.diff
+*.patch
+
+# ========================================
+# Security Sensitive Files
+# ========================================
+# Never commit sensitive data
+*.key
+*.pem
+*.p12
+*.keystore
+*.jks
+auth.json
+credentials.json
+secrets.json
+api_keys.txt
+passwords.txt
+
+# Email credentials
+email-config.php
+smtp-config.php
+
+# Database credentials
+db-credentials.php
+database-config.php
+
+# ========================================
+# Project Specific
+# ========================================
+# Development/Testing Files
+test-*.html
+test-*.php
+debug.php
+info.php
+phpinfo.php
+
+# Documentation (development)
+DEV-*.md
+TEST-*.md
+DEBUG-*.md
+NOTES.md
+TODO.md
+
+# Backup SQL files
+add-*.sql
+alter-*.sql
+backup-*.sql
+test-*.sql
+
+# Email testing
+email-test.php
+mail-test.php
+test-email.php
+
+# Development PHP files
+sendmail-*.php
+test-*.php
+debug-*.php
+
+# ========================================
+# Asset Optimization
+# ========================================
+# Original/Unoptimized assets
+src/assets/original/
+src/assets/raw/
+src/assets/unoptimized/
+*.psd
+*.ai
+*.sketch
+*.fig
+*.xcf
+
+# ========================================
+# CI/CD & Deployment
+# ========================================
+.github/
+.gitlab-ci.yml
+.travis.yml
+circle.yml
+Jenkinsfile
+Dockerfile.dev
+docker-compose.dev.yml
+k8s/
+
+# ========================================
+# Analytics & Monitoring
+# ========================================
+.analytics/
+stats/
+metrics/
+monitoring/
+
+# ========================================
+# Common Exclusions
+# ========================================
+*.min.js.map
+*.min.css.map
+.browserslistrc
+
+# ========================================
+# Optional: Keep Important Files
+# ========================================
+# Uncomment if you want to track these
+# !dist/index.html
+# !config/sample-config.php
+# !docs/setup-instructions.md
+
+# ========================================
+# End of .gitignore
+# ========================================
