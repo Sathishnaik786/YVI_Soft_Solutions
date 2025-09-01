@@ -45,6 +45,7 @@ access.log
 .env.test.local
 .env.production.local
 .env.*.local
+.env.email
 config.php
 db_config.php
 email_config.php

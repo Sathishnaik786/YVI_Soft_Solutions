@@ -1,19 +1,21 @@
 import React, { useState } from 'react'
 import './Info_Form.css'
-import API_CONFIG from '../../config/api.js'
+import { insertContactMessage } from '../../config/supabase.js'
+import { sendContactEmail } from '../../services/emailService.js'
 
 const Info_Form = () => {
   const [form, setForm] = useState({
     name: '',
     email: '',
+    company: '',
+    phone: '',
     subject: '',
     message: ''
   })
   const [status, setStatus] = useState('') 
   const [errorMessage, setErrorMessage] = useState('') 
-// Add a test mode flag - set to true to test GoDaddy database directly
-const TEST_REAL_DATABASE = true // Set to true to test remote GoDaddy database
-const apiUrl = API_CONFIG.getApiUrl('db_save.php')
+  const [submittedName, setSubmittedName] = useState('') // Store the name for success message
+
   const handleChange = (e) => {
     setForm({
       ...form,
@@ -21,9 +23,18 @@ const apiUrl = API_CONFIG.getApiUrl('db_save.php')
     })
   }
 
- 
+  const validatePhone = (phone) => {
+    // Basic phone number validation (allows various formats)
+    const phoneRegex = /^[+]?[1-9][\d]{0,15}$/;
+    // Remove spaces, dashes, parentheses for validation
+    const cleanPhone = phone.replace(/[\s\-()]/g, '');
+    return phoneRegex.test(cleanPhone);
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault()
+    console.log('🚀 FORM SUBMIT TRIGGERED!')
+    console.log('📝 Form data before validation:', form)
     setErrorMessage('') // Clear previous errors
     
     // Validate required fields
@@ -37,13 +48,53 @@ const apiUrl = API_CONFIG.getApiUrl('db_save.php')
       setErrorMessage('Email is required')
       return
     }
+    if (!form.phone.trim()) {
+      setStatus('error')
+      setErrorMessage('Phone number is required')
+      return
+    }
+    if (!validatePhone(form.phone)) {
+      setStatus('error')
+      setErrorMessage('Please enter a valid phone number')
+      return
+    }
     if (!form.message.trim()) {
       setStatus('error')
       setErrorMessage('Message is required')
       return
     }
 
-    // Additional validation
+    // Additional validation based on database schema
+    if (form.name.length > 100) {
+      setStatus('error')
+      setErrorMessage('Name cannot exceed 100 characters')
+      return
+    }
+
+    if (form.email.length > 150) {
+      setStatus('error')
+      setErrorMessage('Email cannot exceed 150 characters')
+      return
+    }
+
+    if (form.company.length > 100) {
+      setStatus('error')
+      setErrorMessage('Company name cannot exceed 100 characters')
+      return
+    }
+
+    if (form.phone.length > 20) {
+      setStatus('error')
+      setErrorMessage('Phone number cannot exceed 20 characters')
+      return
+    }
+
+    if (form.subject.length > 200) {
+      setStatus('error')
+      setErrorMessage('Subject cannot exceed 200 characters')
+      return
+    }
+
     if (form.name.length < 2) {
       setStatus('error')
       setErrorMessage('Name must be at least 2 characters long')
@@ -57,67 +108,57 @@ const apiUrl = API_CONFIG.getApiUrl('db_save.php')
     }
 
     setStatus('loading')
+    console.log('🔄 Setting status to loading')
 
     try {
-      // Check if we're in development (localhost)
-      const isDevelopment = window.location.hostname === 'localhost'
-      
-      // Add a test mode flag - set to true to test real database in development
-      const TEST_REAL_DATABASE = true // Set to true to test GoDaddy database directly
-      
-      if (isDevelopment && !TEST_REAL_DATABASE) {
-        // Mock backend for development
-        console.log('🚀 Development Mode: Form submission:', form)
-        
-        // Simulate API delay
-        await new Promise(resolve => setTimeout(resolve, 1500))
-        
-        // Mock success (you can change this to test error states)
-        setStatus('success')
-        setForm({ name: '', email: '', subject: '', message: '' })
-        setErrorMessage('')
-        
-        // Log for development
-        console.log('✅ Mock database save successful!')
-        console.log('💾 Database: Users.contact_messages (REMOTE TEST)')
-        console.log('🌐 API URL:', apiUrl)
-        console.log('👤 From:', form.name, '(' + form.email + ')')
-        console.log('💬 Message:', form.message)
-        console.log('⚠️ NOTE: Update domain in src/config/api.js')
-        
-        return
-      }
-      
-      // Real PHP backend with database (production or test mode)
-      console.log(isDevelopment ? '🧪 Testing real database in development...' : '🚀 Production mode')
-      const formData = new FormData()
-      formData.append('name', form.name)
-      formData.append('email', form.email)
-      formData.append('subject', form.subject)
-      formData.append('message', form.message)
-
-      const response = await fetch(apiUrl, {
-        method: 'POST',
-        body: formData
+      console.log('🚀 FORM SUBMISSION STARTED')
+      console.log('📤 Form Data:', {
+        name: form.name,
+        email: form.email,
+        company: form.company,
+        phone: form.phone,
+        subject: form.subject || 'No Subject',
+        message: form.message
       })
-
-      const result = await response.json()
       
-      if (result.status === 'success') {
-        setStatus('success')
-        setForm({ name: '', email: '', subject: '', message: '' })
-        setErrorMessage('')
-      } else {
-        setStatus('error')
-        setErrorMessage(result.message || 'Unknown error occurred')
-        console.error('Server error:', result)
-      }
+      // Store the name before resetting the form
+      setSubmittedName(form.name)
+      console.log('💾 Stored submitted name:', form.name)
+      
+      // Insert data into Supabase
+      console.log('📡 Sending data to Supabase...')
+      const dbResult = await insertContactMessage(form)
+      console.log('✅ Data saved to Supabase:', dbResult)
+      
+      // Send email notification
+      console.log('📧 Sending email notification...')
+      const emailResult = await sendContactEmail(form)
+      console.log('✅ Email sent successfully:', emailResult)
+      
+      setStatus('success')
+      console.log('🔄 Setting status to success')
+      console.log('📝 Submitted name:', submittedName)
+      setForm({ name: '', email: '', company: '', phone: '', subject: '', message: '' })
+      setErrorMessage('')
+      
     } catch (err) {
       console.error('Error sending message:', err)
+      console.error('Error details:', {
+        message: err.message,
+        stack: err.stack,
+        name: err.name
+      })
+      
       setStatus('error')
-      setErrorMessage('Network error. Please check your connection and try again.')
+      setErrorMessage(`Failed to send message: ${err.message || 'Please try again later.'}`)
+      console.log('🔄 Setting status to error')
     }
   }
+
+  // Add effect to log status changes
+  React.useEffect(() => {
+    console.log('🔄 Status changed to:', status)
+  }, [status])
 
   return (
     <section id="contact" className="contact">
@@ -160,7 +201,7 @@ const apiUrl = API_CONFIG.getApiUrl('db_save.php')
           </div>
 
           <div className="col-lg-6">
-            <form id="contactForm" onSubmit={handleSubmit} className="php-email-form" action="db_save.php" method="POST">
+            <form id="contactForm" onSubmit={handleSubmit} className="php-email-form">
               <div className="row">
                 <div className="col-md-6 form-group">
                   <input
@@ -170,6 +211,7 @@ const apiUrl = API_CONFIG.getApiUrl('db_save.php')
                     placeholder="Your Name"
                     value={form.name}
                     onChange={handleChange}
+                    maxLength={100}
                     required
                   />
                 </div>
@@ -178,9 +220,37 @@ const apiUrl = API_CONFIG.getApiUrl('db_save.php')
                     type="email"
                     name="email"
                     className="form-control"
-                    placeholder="Your Email"
+                    placeholder="Enter Your business email"
                     value={form.email}
                     onChange={handleChange}
+                    maxLength={150}
+                    required
+                  />
+                </div>
+              </div>
+
+              <div className="row">
+                <div className="col-md-6 form-group">
+                  <input
+                    type="text"
+                    name="company"
+                    className="form-control"
+                    placeholder="Your Company"
+                    value={form.company}
+                    onChange={handleChange}
+                    maxLength={100}
+                    required
+                  />
+                </div>
+                <div className="col-md-6 form-group mt-3 mt-md-0">
+                  <input
+                    type="tel"
+                    name="phone"
+                    className="form-control"
+                    placeholder="Phone Number"
+                    value={form.phone}
+                    onChange={handleChange}
+                    maxLength={20}
                     required
                   />
                 </div>
@@ -194,7 +264,7 @@ const apiUrl = API_CONFIG.getApiUrl('db_save.php')
                   placeholder="Subject"
                   value={form.subject}
                   onChange={handleChange}
-                  required
+                  maxLength={200}
                 />
               </div>
 
@@ -210,15 +280,16 @@ const apiUrl = API_CONFIG.getApiUrl('db_save.php')
               </div>
 
               <div className="my-3">
+                {console.log('🔄 Rendering status messages, current status:', status)}
                 {status === 'loading' && <div className="loading">Sending...</div>}
                 {status === 'error' && (
-                  <div className="error-message" style={{color: 'red'}}>
+                  <div className="error-message">
                     ❌ {errorMessage || 'Failed to send message. Please try again later.'}
                   </div>
                 )}
                 {status === 'success' && (
-                  <div className="sent-message" style={{color: 'green'}}>
-                    ✅ Message received. Thank you!
+                  <div className="sent-message">
+                    ✅ Thank you, {submittedName}! Your message has been received! Our team will contact you very soon.
                   </div>
                 )}
               </div>

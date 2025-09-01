@@ -9,8 +9,10 @@ export const API_CONFIG = {
   getApiUrl: function(endpoint = 'db_save.php') {
     const isLocal = window.location.hostname === 'localhost';
     if (isLocal) {
-      // When running locally, use your GoDaddy domain
-      return `https://${this.GODADDY_DOMAIN}/${endpoint}`;
+      // For local development, use relative path to test locally
+      return `/${endpoint}`;
+      // Uncomment below line to test against GoDaddy directly:
+      // return `https://${this.GODADDY_DOMAIN}/${endpoint}`;
     } else {
       // When running on production (GoDaddy), use relative path
       return endpoint;

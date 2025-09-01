@@ -66,12 +66,11 @@
 }
 
 .contact .php-email-form .error-message {
-  display: none;
-  color: var(--color-white);
-  background: var(--color-red);
+  color: #ff0000; /* Red color for error text */
   text-align: left;
   padding: 15px;
   font-weight: 600;
+  margin-bottom: 15px;
 }
 
 .contact .php-email-form .error-message br+br {
@@ -79,16 +78,14 @@
 }
 
 .contact .php-email-form .sent-message {
-  display: none;
-  color: var(--color-white);
-  background: var(--color-green);
+  color: #28a745; /* Green color for success text (without background) */
   text-align: center;
   padding: 15px;
   font-weight: 600;
+  margin-bottom: 15px;
 }
 
 .contact .php-email-form .loading {
-  display: none;
   background: var(--color-white);
   text-align: center;
   padding: 15px;

@@ -9,14 +9,14 @@ A modern, responsive business website for YVI Soft Solutions - delivering innova
 
 ## 🚀 Features
 
-- **Modern Tech Stack**: Built with React 19.1.0 and Vite 7.0.0 for optimal performance
-- **Responsive Design**: Bootstrap 5.3.7 with custom CSS for all device compatibility
-- **Contact Management**: Database-backed contact form with email notifications
-- **Multi-theme Support**: 6 built-in color themes (blue, green, red, orange, purple, pink)
-- **Smooth Animations**: AOS (Animate On Scroll) integration for enhanced UX
-- **Performance Optimized**: Vite build system with Hot Module Replacement (HMR)
-- **Interactive Components**: Swiper sliders for testimonials and client showcases
-- **Email Integration**: PHPMailer with SMTP support for contact form notifications
+- **Modern UI/UX**: Responsive design with Bootstrap 5
+- **Smooth Animations**: AOS scroll animations
+- **Interactive Components**: Swiper carousel, mobile menu
+- **Contact Form**: Real-time validation with Supabase backend
+- **Email Integration**: Automated notifications
+- **Theme Customization**: 6 color themes
+- **Performance Optimized**: Vite build tool
+- **SEO Friendly**: Semantic HTML structure
 
 ## 🛠️ Technology Stack
 
@@ -31,9 +31,10 @@ A modern, responsive business website for YVI Soft Solutions - delivering innova
 - **Sass** - CSS preprocessor
 
 ### Backend
-- **PHP** 8+ - Server-side processing
-- **MySQL** - Database management
-- **PHPMailer** - Email functionality
+- **Supabase** - Backend as a Service
+- **PostgreSQL** - Database management
+- **Node.js/Express** - Email notification server
+- **Nodemailer** - Email sending library
 
 ### Development Tools
 - **ESLint** - Code linting and quality
@@ -57,14 +58,14 @@ YviSoft/
 │   │   ├── Services/
 │   │   └── ...
 │   ├── config/              # Configuration files
+│   ├── services/            # Service files (email service)
 │   ├── styles/              # CSS and Sass files
 │   ├── assets/              # Frontend assets
 │   ├── App.jsx              # Main App component
 │   └── main.jsx             # Entry point
-├── PHPMailer/               # Email library
-│   └── src/                 # PHPMailer source files
-├── db_save.php              # Backend API endpoint
-├── package.json             # Dependencies
+├── server.js                # Email notification server
+├── package.json             # Frontend dependencies
+├── package-backend.json     # Backend dependencies
 ├── vite.config.js           # Vite configuration
 ├── eslint.config.js         # ESLint configuration
 └── README.md                # Project documentation
@@ -76,8 +77,7 @@ YviSoft/
 
 - **Node.js** (v18.0.0 or higher)
 - **npm** or **yarn**
-- **PHP** 8.0+ (for backend functionality)
-- **MySQL** database (for contact form)
+- **Supabase** account (for backend functionality)
 
 ### Installation
 
@@ -87,7 +87,7 @@ YviSoft/
    cd yvi-soft-redesign
    ```
 
-2. **Install dependencies**
+2. **Install frontend dependencies**
    ```bash
    npm install
    ```
@@ -115,64 +115,115 @@ YviSoft/
 | `npm run build` | Build for production |
 | `npm run preview` | Preview production build locally |
 | `npm run lint` | Run ESLint for code quality |
+| `npm run deploy` | Run deployment helper script |
 
 ## 🗄️ Database Setup
 
 ### Contact Form Database
 
-The contact form uses a MySQL database to store submissions:
+The contact form uses Supabase with PostgreSQL to store submissions. First, you'll need to set up a Supabase project and create the required table:
+
+1. Create a Supabase account at [supabase.com](https://supabase.com/)
+2. Create a new project
+3. Get your project URL and anon key from the project settings
+4. Create the contact_messages table:
 
 ```sql
-CREATE TABLE contact_messages (
-  id INT(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE contact_messages_new (
+  id SERIAL PRIMARY KEY,
   name VARCHAR(100) NOT NULL,
   email VARCHAR(150) NOT NULL,
+  company VARCHAR(100),
+  phone VARCHAR(20),
   subject VARCHAR(200) DEFAULT 'No Subject',
   message TEXT NOT NULL,
-  ip VARCHAR(45) DEFAULT NULL,
-  user_agent TEXT DEFAULT NULL,
-  created_at DATETIME NOT NULL,
-  PRIMARY KEY (id),
-  INDEX idx_email (email),
-  INDEX idx_created_at (created_at)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  ip VARCHAR(45),
+  user_agent TEXT,
+  created_at TIMESTAMP DEFAULT NOW()
+);
+```
+
+5. Set up environment variables in your `.env` file:
+
+```env
+VITE_SUPABASE_URL=your_supabase_project_url
+VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
 ```
 
 ### Configuration
 
-Update database credentials in `db_save.php`:
+Update Supabase credentials in `src/config/supabase.js` or use environment variables:
 
-```php
-$db_config = [
-    'host' => 'localhost',
-    'username' => 'your_username',
-    'password' => 'your_password',
-    'database' => 'your_database',
-    'port' => 3306
-];
+```javascript
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || 'https://your-project.supabase.co'
+const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY || 'your-anon-key'
 ```
 
 ## 📧 Email Configuration
 
-### SMTP Setup
+### Backend Email Server
 
-Update email settings in `db_save.php`:
+The contact form now sends email notifications in addition to storing data in the database. To enable this functionality:
 
-```php
-$smtp_config = [
-    'host' => 'smtp.gmail.com',
-    'username' => 'your-email@gmail.com',
-    'password' => 'your-app-password',
-    'to_email' => 'admin@yvisoft.com',
-    'to_name' => 'YVI Soft Admin'
-];
-```
+1. **Install backend dependencies**:
+   ```bash
+   # Rename the backend package file
+   mv package-backend.json package.json
+   
+   # Install backend dependencies
+   npm install
+   ```
 
-### Gmail Setup
+2. **Configure email credentials**:
+   Create a `.env` file in the project root:
+   ```env
+   # Email Configuration
+   EMAIL_USER=contact@yvisoft.com
+   EMAIL_PASS=your_email_password
+   
+   # Server Configuration
+   PORT=3001
+   ```
 
-1. Enable 2-Factor Authentication
-2. Generate App Password
-3. Use App Password in configuration
+3. **Start the email server**:
+   ```bash
+   # Start the email server
+   npm run start
+   
+   # Or for development with auto-restart
+   npm run dev
+   ```
+
+4. **Configure Vite proxy**:
+   Update `vite.config.js` to proxy API requests to the email server:
+   ```javascript
+   import { defineConfig } from 'vite'
+   import react from '@vitejs/plugin-react'
+   
+   // https://vitejs.dev/config/
+   export default defineConfig({
+     plugins: [react()],
+     server: {
+       proxy: {
+         '/api': {
+           target: 'http://localhost:3001',
+           changeOrigin: true,
+           secure: false
+         }
+       }
+     }
+   })
+   ```
+
+### Email Service Options
+
+Popular email services that work well with this setup:
+- **GoDaddy SMTP** - Uses smtpout.secureserver.net with port 465
+- **SendGrid** - Reliable transactional email service
+- **Mailgun** - Feature-rich email platform
+- **Resend** - Developer-first email API
+
+For detailed setup instructions, see [EMAIL_SETUP_GUIDE.md](EMAIL_SETUP_GUIDE.md).
 
 ## 🎨 Theme Customization
 
@@ -196,113 +247,36 @@ Themes are managed via CSS variables in the styles directory.
    npm run build
    ```
 
-2. **Upload files**
-   - Upload `dist/` contents to `/public_html/`
-   - Upload `db_save.php` to root directory
-   - Upload `PHPMailer/` directory
+2. **Set up Supabase**
+   - Create Supabase project
+   - Create contact_messages table
+   - Configure environment variables
 
-### GoDaddy Hosting
+3. **Deploy the email server**
+   - Deploy the Node.js server to a hosting platform (e.g., Render, Heroku, DigitalOcean)
+   - Update the proxy configuration in `vite.config.js` to point to your deployed server
 
-1. **File Structure**
-   ```
-   /public_html/
-   ├── index.html
-   ├── assets/
-   ├── db_save.php
-   └── PHPMailer/
-   ```
+### Hosting Options
 
-2. **Database Setup**
-   - Create MySQL database via cPanel
-   - Import table structure
-   - Update credentials in `db_save.php`
+- **Frontend**: Vercel, Netlify, GitHub Pages, GoDaddy
+- **Backend**: Render, Heroku, DigitalOcean App Platform
+- **Database**: Supabase (already configured)
 
-## 🔒 Security Features
+### Deployment Guides
 
-- **Input Sanitization**: All form inputs are sanitized using `htmlspecialchars()` and `strip_tags()`
-- **SQL Injection Prevention**: Prepared statements for database queries
-- **CORS Protection**: Proper cross-origin headers configured
-- **Email Validation**: Server-side email format validation
-- **Rate Limiting**: Built-in protection against spam submissions
+For detailed deployment instructions, see:
+- [DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md) - General deployment instructions
+- [GODADDY_DEPLOYMENT_GUIDE.md](GODADDY_DEPLOYMENT_GUIDE.md) - Specific instructions for GoDaddy hosting
 
-## 📱 Components
+You can also use the deployment helper script:
+```bash
+npm run deploy
+```
 
-### Core Components
+## 📚 Additional Documentation
 
-- **Header**: Navigation with mobile-responsive menu
-- **Banner**: Hero sections with call-to-action
-- **About**: Company information and team
-- **Services**: AI, Web Dev, Mobile App, Oracle, RPA, UI/UX
-- **Approach**: Development methodology
-- **Testimonials**: Client feedback with Swiper carousel
-- **Clients**: Partner logos and case studies
-- **Contact**: Contact form with real-time validation
-- **Footer**: Company information and links
-
-### Features
-
-- **Scroll Animations**: AOS integration for smooth scrolling effects
-- **Mobile Menu**: Responsive navigation for mobile devices
-- **Form Validation**: Client and server-side validation
-- **Email Notifications**: Automated email alerts for form submissions
-- **Theme Switching**: Dynamic color theme changes
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-## 📝 Development Guidelines
-
-### Code Style
-
-- Follow ESLint configuration
-- Use functional components with hooks
-- Maintain component modularity
-- Write descriptive commit messages
-
-### Testing
-
-- Test form functionality thoroughly
-- Verify email notifications
-- Check responsive design across devices
-- Validate database connections
-
-## 🐛 Known Issues
-
-- Large video assets may impact loading performance
-- Testing framework not yet configured
-- TypeScript integration pending
-
-## 📈 Performance Optimization
-
-- **Vite HMR**: Fast development with hot module replacement
-- **Code Splitting**: Automatic code splitting for optimal loading
-- **Asset Optimization**: Vite handles CSS and JS minification
-- **Image Optimization**: Consider implementing lazy loading
-
-## 📞 Support
-
-**YVI Soft Solutions**
-- **Website**: [yvisoft.com](https://yvisoft.com)
-- **Email**: info@yvisoft.com
-- **Phone**: +91-8317622417
-- **Location**: Hyderabad, Telangana, India
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🙏 Acknowledgments
-
-- React team for the amazing framework
-- Vite team for the lightning-fast build tool
-- Bootstrap team for the responsive framework
-- All contributors and supporters
-
----
-
-**Built with ❤️ by YVI Soft Solutions**
+- [DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md) - Detailed deployment instructions
+- [GODADDY_DEPLOYMENT_GUIDE.md](GODADDY_DEPLOYMENT_GUIDE.md) - GoDaddy-specific deployment guide
+- [SUPABASE_EMAIL_SETUP.md](SUPABASE_EMAIL_SETUP.md) - Alternative Supabase-based email solutions
+- [EMAIL_SETUP_GUIDE.md](EMAIL_SETUP_GUIDE.md) - Detailed email server setup guide
+- [SUPABASE_MIGRATION_SUMMARY.md](SUPABASE_MIGRATION_SUMMARY.md) - Summary of migration from PHP to Supabase

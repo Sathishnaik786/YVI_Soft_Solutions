@@ -7,12 +7,19 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "deploy": "node deploy.js",
+    "prepare-backend": "node prepare-backend.js"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.56.1",
     "aos": "^2.3.4",
     "axios": "^1.11.0",
     "bootstrap": "^5.3.7",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.1",
+    "express": "^5.1.0",
+    "nodemailer": "^7.0.6",
     "react": "^19.1.0",
     "react-bootstrap": "^2.10.10",
     "react-dom": "^19.1.0",
