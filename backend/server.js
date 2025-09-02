@@ -5,12 +5,27 @@ import express from 'express';
 import cors from 'cors';
 import nodemailer from 'nodemailer';
 import dotenv from 'dotenv';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 // Configure dotenv
 dotenv.config();
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 const app = express();
 const PORT = process.env.PORT || 3001;
+
+// Root route
+app.get("/", (req, res) => {
+  res.json({ success: true, message: "Backend is live 🚀" });
+});
+
+// Health route
+app.get("/health", (req, res) => {
+  res.json({ status: "ok", timestamp: new Date() });
+});
 
 // Middleware with production-ready CORS configuration
 // Allow requests only from your frontend domain
@@ -28,7 +43,7 @@ const corsOptions = {
 if (process.env.FRONTEND_URL) {
   corsOptions.origin.push(process.env.FRONTEND_URL);
 }
-
+ 
 // For production, remove localhost origins
 if (process.env.NODE_ENV === 'production') {
   corsOptions.origin = corsOptions.origin.filter(origin => 
@@ -49,6 +64,19 @@ app.use(cors(corsOptions));
 // Enhanced middleware to parse JSON and handle errors
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+
+// Serve frontend build if it exists
+try {
+  const frontendBuildPath = path.join(__dirname, "..", "frontend", "dist");
+  app.use(express.static(frontendBuildPath));
+  
+  // Serve index.html for all other routes (SPA fallback)
+  app.get("*", (req, res) => {
+    res.sendFile(path.join(frontendBuildPath, "index.html"));
+  });
+} catch (error) {
+  console.log("Frontend build not found, skipping static file serving");
+}
 
 // Create email transporter with retry mechanism for SMTP (ports 587/465)
 let transporter;
@@ -198,56 +226,42 @@ function generateContactFormEmail(data) {
     <head>
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>New Contact Form Submission</title>
+      <title>Contact Form Submission</title>
     </head>
-    <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
-      <div style="background-color: #f8f9fa; padding: 20px; border-radius: 5px; margin-bottom: 20px;">
-        <h2 style="color: #007bff; margin-top: 0;">New Contact Form Submission</h2>
-        <p><strong>Name:</strong> ${data.name || 'Not provided'}</p>
-        <p><strong>Email:</strong> <a href="mailto:${data.email || '#'}">${data.email || 'Not provided'}</a></p>
-        <p><strong>Company:</strong> ${data.company || 'Not provided'}</p>
-        <p><strong>Phone:</strong> ${data.phone || 'Not provided'}</p>
-        <p><strong>Subject:</strong> ${data.subject || 'No Subject'}</p>
-        <div style="margin: 20px 0;">
-          <h3 style="color: #007bff;">Message:</h3>
-          <p style="background-color: #ffffff; padding: 15px; border-left: 4px solid #007bff; white-space: pre-wrap;">${data.message || 'No message'}</p>
+    <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+      <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
+        <h2 style="color: #2c3e50;">New Contact Form Submission</h2>
+        
+        <div style="background-color: #f8f9fa; padding: 15px; border-radius: 5px; margin: 15px 0;">
+          <h3 style="margin-top: 0; color: #2c3e50;">Contact Information</h3>
+          <p><strong>Name:</strong> ${data.name || 'N/A'}</p>
+          <p><strong>Email:</strong> ${data.email || 'N/A'}</p>
+          <p><strong>Company:</strong> ${data.company || 'N/A'}</p>
+          <p><strong>Phone:</strong> ${data.phone || 'N/A'}</p>
         </div>
-        <div style="background-color: #e9ecef; padding: 10px; border-radius: 3px; font-size: 0.9em;">
-          <p><strong>Additional Information:</strong></p>
-          <p><strong>IP Address:</strong> ${data.ip || 'unknown'}</p>
-          <p><strong>User Agent:</strong> ${data.userAgent || 'unknown'}</p>
-          <p><strong>Submitted at:</strong> ${data.timestamp ? new Date(data.timestamp).toLocaleString() : new Date().toLocaleString()}</p>
+        
+        <div style="background-color: #f8f9fa; padding: 15px; border-radius: 5px; margin: 15px 0;">
+          <h3 style="margin-top: 0; color: #2c3e50;">Message Details</h3>
+          <p><strong>Subject:</strong> ${data.subject || 'N/A'}</p>
+          <div>
+            <strong>Message:</strong>
+            <p style="background-color: white; padding: 10px; border-left: 4px solid #3498db; margin: 10px 0;">
+              ${data.message || 'N/A'}
+            </p>
+          </div>
         </div>
-      </div>
-      <div style="text-align: center; font-size: 0.8em; color: #6c757d;">
-        <p>This email was automatically generated from the YVI Soft contact form.</p>
-        <p>YVI Soft Solutions</p>
+        
+        <div style="margin-top: 20px; font-size: 0.9em; color: #666;">
+          <p><strong>Submission Time:</strong> ${new Date().toLocaleString()}</p>
+        </div>
       </div>
     </body>
     </html>
   `;
 }
 
-// Health check endpoint
-app.get('/health', (req, res) => {
-  res.json({ status: 'OK', timestamp: new Date().toISOString() });
-});
-
-// Global error handler
-app.use((err, req, res, next) => {
-  console.error('Unhandled error:', err);
-  // Ensure we always return JSON
-  res.setHeader('Content-Type', 'application/json');
-  res.status(500).json({ 
-    success: false,
-    error: 'Internal server error',
-    details: process.env.NODE_ENV === 'development' ? err.message : 'An unexpected error occurred'
-  });
-});
-
-// Handle 404 for undefined routes
-app.use('*', (req, res) => {
-  // Ensure we always return JSON
+// 404 handler for API routes
+app.use('/api/*', (req, res) => {
   res.setHeader('Content-Type', 'application/json');
   res.status(404).json({ 
     success: false,
@@ -257,7 +271,7 @@ app.use('*', (req, res) => {
 
 // Start server
 app.listen(PORT, () => {
-  console.log(`🚀 Email server running on port ${PORT}`);
+  console.log(`🚀 Server running on port ${PORT}`);
 });
 
 export default app;
