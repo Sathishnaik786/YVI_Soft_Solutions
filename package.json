@@ -2,11 +2,11 @@
   "name": "yvi-soft-fullstack",
   "version": "1.0.0",
   "description": "YVI Soft website with separated frontend and backend",
-  "main": "server.js",
+  "main": "start-dev.js",
   "scripts": {
     "dev": "node start-dev.js",
-    "start": "node server.js",
-    "build": "npm install && cd backend && npm install",
+    "start": "node start-dev.js",
+    "build": "cd backend && npm install",
     "build:frontend": "node build-frontend.js",
     "deploy:backend": "node deploy-backend.js",
     "deploy": "npm run build:frontend && npm run deploy:backend"
@@ -18,8 +18,5 @@
     "website"
   ],
   "author": "YVI Soft Solutions",
-  "license": "MIT",
-  "dependencies": {
-    "express": "^4.18.2"
-  }
+  "license": "MIT"
 }
