@@ -3,7 +3,7 @@ services:
     name: yvi-soft-email-server
     runtime: node
     buildCommand: npm run build
-    startCommand: node start.js
+    startCommand: npm start
     envVars:
       - key: EMAIL_USER
         sync: false
