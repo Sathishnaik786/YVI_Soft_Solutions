@@ -2,7 +2,6 @@ services:
   - type: web
     name: yvi-soft-email-server
     runtime: node
-    rootDir: backend
     buildCommand: cd backend && npm install
     startCommand: cd backend && node server.js
     envVars:
