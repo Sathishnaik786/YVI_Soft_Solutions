@@ -1,5 +1,5 @@
 # YVI Soft Solutions - Comprehensive .gitignore
-# React + Vite + PHP + MySQL Project
+# React + Vite + Node.js + Supabase Project
 
 # ========================================
 # Node.js / NPM / Yarn
@@ -49,16 +49,6 @@ access.log
 config.php
 db_config.php
 email_config.php
-
-# ========================================
-# PHP Specific
-# ========================================
-vendor/
-composer.lock
-*.php~
-*.phps
-.phpunit.result.cache
-phpunit.xml
 
 # ========================================
 # Database
@@ -253,17 +243,62 @@ test-*.php
 debug-*.php
 
 # ========================================
-# Asset Optimization
+# Large Files - Should Never Be Tracked
 # ========================================
-# Original/Unoptimized assets
-src/assets/original/
-src/assets/raw/
-src/assets/unoptimized/
+# Compressed archives
+*.zip
+*.tar.gz
+*.rar
+*.7z
+*.xz
+*.bz2
+
+# Executables
+*.exe
+*.msi
+*.app
+*.dmg
+
+# Large media files
+*.mp4
+*.mov
+*.avi
+*.mkv
+*.wmv
+*.flv
+*.webm
+*.m4v
+*.mpg
+*.mpeg
+*.3gp
+
+# Large audio files
+*.mp3
+*.wav
+*.flac
+*.aac
+*.ogg
+*.wma
+
+# Large image files
 *.psd
 *.ai
 *.sketch
 *.fig
 *.xcf
+
+# Database dumps
+*.sql.gz
+*.dump.gz
+
+# ========================================
+# Build Artifacts and Distribution Files
+# ========================================
+*.min.js
+*.min.css
+*.map
+bundle.js
+bundle.css
 
 # ========================================
 # CI/CD & Deployment
@@ -291,14 +326,6 @@ monitoring/
 *.min.js.map
 *.min.css.map
 .browserslistrc
-
-# ========================================
-# Optional: Keep Important Files
-# ========================================
-# Uncomment if you want to track these
-# !dist/index.html
-# !config/sample-config.php
-# !docs/setup-instructions.md
 
 # ========================================
 # End of .gitignore
