@@ -1,20 +1,8 @@
-// Simple redirect to the health endpoint for testing
-const express = require('express');
+// Simple server that starts the backend
 const { spawn } = require('child_process');
 const path = require('path');
 
-const app = express();
-const PORT = process.env.PORT || 3000;
-
-// Serve a simple message for the root endpoint
-app.get('/', (req, res) => {
-  res.json({ 
-    message: 'YVI Soft Email Server Proxy', 
-    status: 'Running',
-    health: 'Check /health endpoint',
-    timestamp: new Date().toISOString()
-  });
-});
+console.log('Starting YVI Soft Email Server...');
 
 // Start the backend server as a child process
 const backendDir = path.join(__dirname, 'backend');
@@ -27,12 +15,15 @@ const backend = spawn('node', ['server.js'], {
 
 backend.on('error', (error) => {
   console.error('Failed to start backend server:', error);
+  process.exit(1);
 });
 
 backend.on('exit', (code) => {
   console.log(`Backend server exited with code ${code}`);
+  process.exit(code);
 });
 
-app.listen(PORT, () => {
-  console.log(`Proxy server running on port ${PORT}`);
-});
+// Keep the main process alive
+setInterval(() => {
+  // Keep alive
+}, 10000);
