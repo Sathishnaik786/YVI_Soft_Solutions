@@ -2,10 +2,10 @@
   "name": "yvi-soft-fullstack",
   "version": "1.0.0",
   "description": "YVI Soft website with separated frontend and backend",
-  "main": "start-dev.js",
+  "main": "server.js",
   "scripts": {
+    "start": "node server.js",
     "dev": "node start-dev.js",
-    "start": "node start-dev.js",
     "build": "cd backend && npm install",
     "build:frontend": "node build-frontend.js",
     "deploy:backend": "node deploy-backend.js",
