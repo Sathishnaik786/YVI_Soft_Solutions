@@ -3,13 +3,20 @@
   "version": "1.0.0",
   "description": "YVI Soft website with separated frontend and backend",
   "main": "server.js",
+  "type": "module",
   "scripts": {
-    "start": "node server.js",
+    "start": "cd backend && node server.js",
     "dev": "node start-dev.js",
     "build": "cd backend && npm install",
     "build:frontend": "node build-frontend.js",
     "deploy:backend": "node deploy-backend.js",
     "deploy": "npm run build:frontend && npm run deploy:backend"
+  },
+  "dependencies": {
+    "express": "^4.21.2",
+    "cors": "^2.8.5",
+    "nodemailer": "^6.9.16",
+    "dotenv": "^16.4.7"
   },
   "keywords": [
     "react",

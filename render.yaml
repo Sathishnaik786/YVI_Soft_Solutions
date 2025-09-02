@@ -2,7 +2,9 @@ services:
   - type: web
     name: yvi-soft-email-server
     runtime: node
-    buildCommand: npm install && cd backend && npm install
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: node server.js
     envVars:
       - key: EMAIL_USER
         sync: false

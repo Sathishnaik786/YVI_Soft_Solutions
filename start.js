@@ -3,26 +3,25 @@
 // Simple start script for Render deployment
 // This script changes to the backend directory and starts the server
 
-const { exec } = require('child_process');
+const { spawn } = require('child_process');
 const path = require('path');
 
 console.log('Starting YVI Soft Email Server...');
 
 // Change to backend directory and start the server
 const backendDir = path.join(__dirname, 'backend');
-const startCommand = `cd ${backendDir} && npm start`;
 
-console.log(`Executing: ${startCommand}`);
+console.log(`Changing to directory: ${backendDir}`);
 
-exec(startCommand, (error, stdout, stderr) => {
-  if (error) {
-    console.error(`Error starting server: ${error}`);
-    return;
-  }
-  if (stderr) {
-    console.error(`stderr: ${stderr}`);
-  }
-  if (stdout) {
-    console.log(`stdout: ${stdout}`);
-  }
+const server = spawn('node', ['server.js'], {
+  cwd: backendDir,
+  stdio: 'inherit'
+});
+
+server.on('error', (error) => {
+  console.error(`Error starting server: ${error}`);
+});
+
+server.on('close', (code) => {
+  console.log(`Server process exited with code ${code}`);
 });
