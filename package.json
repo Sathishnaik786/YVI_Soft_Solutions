@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "node start-dev.js",
     "start": "node start-dev.js",
+    "build": "cd backend && npm install",
     "build:frontend": "node build-frontend.js",
     "deploy:backend": "node deploy-backend.js",
     "deploy": "npm run build:frontend && npm run deploy:backend"
