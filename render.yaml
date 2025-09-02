@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: yvi-soft-email-server
+    runtime: node
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: node server.js
+    envVars:
+      - key: EMAIL_USER
+        sync: false
+      - key: EMAIL_PASS
+        sync: false
+      - key: PORT
+        value: "3001"
