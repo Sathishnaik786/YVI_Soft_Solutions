@@ -260,8 +260,4 @@ app.listen(PORT, () => {
   console.log(`🚀 Email server running on port ${PORT}`);
 });
 
-<<<<<<< HEAD
 export default app;
-=======
-export default app;
->>>>>>> 8553e0ccbf972392201fcc98ce0c736aa85658d5
