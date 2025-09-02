@@ -1,138 +1,196 @@
-# 📋 YVI Soft Deployment Checklist
+# ✅ YVI Soft Deployment Checklist for GoDaddy
 
-Use this checklist to ensure all steps are completed during deployment.
-
-## 🔲 Pre-Deployment Preparation
+## 🔧 Pre-Deployment Preparation
 
 ### Frontend Preparation
-- [ ] Run `npm run build` to create production build
-- [ ] Verify `dist/` folder contains all necessary files
-- [ ] Test build locally with `npm run preview`
+- [ ] Build React application (`npm run build` in frontend directory)
+- [ ] Verify `dist` folder is created with all necessary files
+- [ ] Update `.env.production` with production environment variables
+- [ ] Test build locally using `npm run preview`
 
 ### Backend Preparation
-- [ ] Run `npm run prepare-backend` to prepare backend files
-- [ ] Verify `yvi-soft-backend/` directory contains:
-  - [ ] `package.json`
-  - [ ] `server.js`
-  - [ ] `render.yaml`
-  - [ ] `README.md`
-  - [ ] `.gitignore`
+- [ ] Create backend deployment package
+- [ ] Verify `server.js` and `package.json` are included
+- [ ] Prepare `.env` file with production credentials
+- [ ] Test backend locally with `npm start`
 
 ### Environment Variables
-- [ ] Create `.env.production` file with production values:
-  - [ ] `VITE_SUPABASE_URL`
-  - [ ] `VITE_SUPABASE_ANON_KEY`
-  - [ ] `VITE_BACKEND_URL`
+- [ ] Supabase URL: `VITE_SUPABASE_URL`
+- [ ] Supabase Anon Key: `VITE_SUPABASE_ANON_KEY`
+- [ ] Backend URL: `VITE_BACKEND_URL`
+- [ ] Email User: `EMAIL_USER`
+- [ ] Email Password: `EMAIL_PASS`
+- [ ] Email Recipient: `EMAIL_TO`
 
-## 🔲 Backend Deployment (Render/Heroku)
+## ☁️ GoDaddy Account Setup
 
-### Repository Setup
-- [ ] Create GitHub repository for backend
-- [ ] Push `yvi-soft-backend/` contents to repository
-- [ ] Verify repository contains all necessary files
+### cPanel Access
+- [ ] Log in to GoDaddy cPanel
+- [ ] Verify file manager access
+- [ ] Confirm FTP/SFTP credentials
+- [ ] Check available disk space
 
-### Platform Deployment
-- [ ] Create new Web Service on Render/Heroku
-- [ ] Connect to GitHub repository
-- [ ] Set environment variables:
-  - [ ] `EMAIL_USER=contact@yvisoft.com`
-  - [ ] `EMAIL_PASS=your_email_password`
-  - [ ] `PORT=3001` (if required)
-- [ ] Deploy application
-- [ ] Verify backend is running and accessible
+### VPS Access
+- [ ] Verify SSH access to VPS
+- [ ] Confirm root/sudo privileges
+- [ ] Check available RAM and storage
+- [ ] Verify firewall settings
 
-### Testing
-- [ ] Test API endpoint: `POST /api/send-email`
-- [ ] Verify email sending functionality
-- [ ] Check application logs for errors
-
-## 🔲 Frontend Deployment (GoDaddy)
+## 📁 Frontend Deployment (cPanel)
 
 ### File Upload
-- [ ] Upload all contents from `dist/` folder to GoDaddy hosting
-- [ ] Use FTP or cPanel File Manager
-- [ ] Ensure `index.html` is in root directory
-- [ ] Verify all assets are uploaded correctly
-
-### Configuration
-- [ ] Set environment variables in GoDaddy hosting:
-  - [ ] `VITE_SUPABASE_URL`
-  - [ ] `VITE_SUPABASE_ANON_KEY`
-  - [ ] `VITE_BACKEND_URL` (pointing to deployed backend)
+- [ ] Connect via FTP/SFTP or cPanel File Manager
+- [ ] Navigate to `public_html` directory
+- [ ] Upload all contents from `dist` folder
+- [ ] Verify `index.html` is in root directory
+- [ ] Confirm all assets are uploaded correctly
 
 ### Domain Configuration
-- [ ] Verify domain points to correct hosting
-- [ ] Check DNS settings if using custom domain
-- [ ] Test website accessibility
+- [ ] Verify domain points to correct directory
+- [ ] Test website access via browser
+- [ ] Check for broken links or missing assets
 
-## 🔲 Post-Deployment Testing
+## ⚙️ Backend Deployment (VPS)
+
+### Server Setup
+- [ ] Connect to VPS via SSH
+- [ ] Create backend directory (`/var/www/yvi-soft-api`)
+- [ ] Upload backend files to VPS
+- [ ] Install Node.js if not already installed
+- [ ] Install project dependencies (`npm install`)
+
+### Process Management
+- [ ] Install PM2 globally (`npm install -g pm2`)
+- [ ] Start backend with PM2 (`pm2 start server.js`)
+- [ ] Set PM2 to start on boot (`pm2 startup` and `pm2 save`)
+- [ ] Verify backend is running (`pm2 list`)
+
+### Reverse Proxy Configuration
+- [ ] Configure Apache or Nginx reverse proxy
+- [ ] Set up subdomain (api.yourdomain.com)
+- [ ] Test API endpoint accessibility
+- [ ] Verify proxy is working correctly
+
+## 🔐 Security Configuration
+
+### SSL Certificates
+- [ ] Enable AutoSSL in cPanel for main domain
+- [ ] Enable AutoSSL for API subdomain
+- [ ] Verify HTTPS access for both domains
+- [ ] Test mixed content issues
+
+### Environment Security
+- [ ] Set proper file permissions (644 for files, 755 for directories)
+- [ ] Secure `.env` files (not accessible via web)
+- [ ] Configure firewall rules if needed
+- [ ] Update SSH security settings
+
+## 🌐 Configuration Updates
+
+### Frontend Configuration
+- [ ] Update `vite.config.js` with production settings
+- [ ] Verify email service points to correct backend URL
+- [ ] Confirm environment variables are properly loaded
+- [ ] Test configuration in development mode
+
+### Backend Configuration
+- [ ] Update `server.js` with production settings
+- [ ] Verify CORS configuration allows your domain
+- [ ] Confirm email transporter settings
+- [ ] Test configuration locally
+
+## 🧪 Testing & Verification
 
 ### Frontend Testing
-- [ ] Visit website in browser
-- [ ] Test all pages and navigation
-- [ ] Verify responsive design on different devices
-- [ ] Check all images and assets load correctly
+- [ ] Test all pages load correctly
+- [ ] Verify all navigation works
+- [ ] Check responsive design on different devices
+- [ ] Test contact form submission
 
-### Contact Form Testing
-- [ ] Fill out and submit contact form
-- [ ] Verify form validation works
-- [ ] Check data saves to Supabase database
-- [ ] Verify email notification is sent
-- [ ] Check browser console for errors
+### Backend Testing
+- [ ] Test API endpoint accessibility
+- [ ] Verify email sending functionality
+- [ ] Check Supabase integration
+- [ ] Test error handling
 
-### API Testing
-- [ ] Monitor network requests in browser dev tools
-- [ ] Verify API calls to backend are successful
-- [ ] Check response times and status codes
+### Integration Testing
+- [ ] Submit test contact form
+- [ ] Verify email receipt
+- [ ] Check Supabase data storage
+- [ ] Monitor browser console for errors
 
-### Performance Testing
-- [ ] Test website loading speed
-- [ ] Verify caching is working correctly
-- [ ] Check for any console errors or warnings
+## 📊 Performance Optimization
 
-## 🔲 Security & Monitoring
+### Frontend Optimization
+- [ ] Enable Gzip compression in cPanel
+- [ ] Configure browser caching
+- [ ] Optimize images if needed
+- [ ] Minify CSS/JS (already done in build)
 
-### Security Checks
-- [ ] Verify HTTPS is enabled
-- [ ] Check that sensitive files are not accessible
-- [ ] Verify environment variables are properly set
-- [ ] Confirm no sensitive data is exposed
+### Backend Optimization
+- [ ] Configure appropriate logging levels
+- [ ] Set up log rotation
+- [ ] Monitor resource usage
+- [ ] Implement rate limiting if needed
+
+## 📈 Monitoring & Maintenance
 
 ### Monitoring Setup
-- [ ] Set up error monitoring (if applicable)
-- [ ] Configure uptime monitoring
-- [ ] Set up log monitoring for backend
-- [ ] Configure alerts for critical issues
+- [ ] Set up uptime monitoring
+- [ ] Configure error tracking
+- [ ] Set up performance monitoring
+- [ ] Create alerting system
 
-## 🔲 Documentation & Handover
+### Backup Strategy
+- [ ] Create backup of frontend files
+- [ ] Create backup of backend files
+- [ ] Backup environment configurations
+- [ ] Document recovery procedures
 
-### Documentation Updates
-- [ ] Update any deployment-specific documentation
-- [ ] Record deployed URLs and access credentials
-- [ ] Document any custom configurations
+## 📝 Documentation
 
-### Handover Information
-- [ ] Provide access credentials to relevant stakeholders
-- [ ] Share deployment documentation
-- [ ] Explain monitoring and maintenance procedures
+### Deployment Documentation
+- [ ] Record deployment steps taken
+- [ ] Document any issues encountered and solutions
+- [ ] Update version information
+- [ ] Create rollback plan
 
-## 🔲 Final Verification
+### Access Information
+- [ ] Document FTP/SFTP credentials location
+- [ ] Record VPS access information
+- [ ] Note environment variable locations
+- [ ] Save PM2 process information
 
-### Final Testing
-- [ ] Perform end-to-end testing of all features
-- [ ] Verify all integrations work correctly
-- [ ] Test error handling and edge cases
-- [ ] Confirm website meets all requirements
+## 🚀 Go-Live Checklist
 
-### Go/No-Go Decision
-- [ ] All checklist items completed
-- [ ] All tests passing
-- [ ] Stakeholder approval obtained
-- [ ] Ready for production use
+### Final Verification
+- [ ] Verify all functionality works in production
+- [ ] Test on multiple devices/browsers
+- [ ] Confirm SSL certificates are valid
+- [ ] Check website speed and performance
 
----
+### DNS Configuration
+- [ ] Verify DNS records are correct
+- [ ] Check DNS propagation
+- [ ] Confirm domain redirects if needed
+- [ ] Test both www and non-www versions
 
-📝 **Notes:**
-- Update this checklist as needed for your specific deployment requirements
-- Add any project-specific steps or considerations
-- Keep this checklist updated with any changes to the deployment process
+### Announcement
+- [ ] Update stakeholders about deployment
+- [ ] Schedule monitoring during launch
+- [ ] Prepare rollback plan
+- [ ] Document success criteria
+
+## 🆘 Emergency Procedures
+
+### Rollback Plan
+- [ ] Identify previous working version
+- [ ] Document rollback steps
+- [ ] Test rollback procedure
+- [ ] Keep backup files accessible
+
+### Support Contacts
+- [ ] GoDaddy support contact information
+- [ ] Team member contact information
+- [ ] Third-party service support contacts
+- [ ] Emergency contact procedures

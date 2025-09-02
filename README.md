@@ -1,282 +1,227 @@
-# YVI Soft Solutions
+# YVI Soft Solutions - Modern Business Website
 
 [![React](https://img.shields.io/badge/React-19.1.0-blue.svg)](https://reactjs.org/)
 [![Vite](https://img.shields.io/badge/Vite-7.0.0-brightgreen.svg)](https://vitejs.dev/)
-[![Bootstrap](https://img.shields.io/badge/Bootstrap-5.3.7-purple.svg)](https://getbootstrap.com/)
+[![Node.js](https://img.shields.io/badge/Node.js-18.x-green.svg)](https://nodejs.org/)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 A modern, responsive business website for YVI Soft Solutions - delivering innovative technology solutions across AI, Web Development, Mobile Apps, Oracle, RPA, and UI/UX design.
 
-## 🚀 Features
+## 🏢 About YVI Soft Solutions
 
-- **Modern UI/UX**: Responsive design with Bootstrap 5
-- **Smooth Animations**: AOS scroll animations
-- **Interactive Components**: Swiper carousel, mobile menu
-- **Contact Form**: Real-time validation with Supabase backend
-- **Email Integration**: Automated notifications
-- **Theme Customization**: 6 color themes
-- **Performance Optimized**: Vite build tool
-- **SEO Friendly**: Semantic HTML structure
+YVI Soft Solutions is a technology consulting firm specializing in providing cutting-edge solutions to businesses worldwide. Our expertise spans across multiple domains including Artificial Intelligence, Web Development, Mobile Applications, Oracle Financials, Robotic Process Automation, and UI/UX Design.
+
+## 🚀 Project Overview
+
+This repository contains the complete YVI Soft website, architecturally separated into frontend and backend components for optimal maintainability and scalability.
+
+### 📁 Project Structure
+
+```
+yvi-soft/
+├── frontend/           # React frontend application
+├── backend/            # Node.js backend server
+├── Database/           # SQL scripts for database setup
+└── README.md           # Project documentation
+```
 
 ## 🛠️ Technology Stack
 
 ### Frontend
-- **React** 19.1.0 - UI framework
-- **Vite** 7.0.0 - Build tool and development server
-- **Bootstrap** 5.3.7 - CSS framework
+- **React** 19.1.0 - Modern UI library
+- **Vite** 7.0.0 - Next-generation frontend tooling
+- **React Router DOM** 7.6.3 - Declarative routing
+- **Bootstrap** 5.3.7 - Responsive CSS framework
 - **React Bootstrap** 2.10.10 - Bootstrap components for React
-- **React Router DOM** 7.6.3 - Client-side routing
-- **Swiper** 11.2.10 - Touch slider components
-- **AOS** 2.3.4 - Scroll animations
-- **Sass** - CSS preprocessor
+- **Swiper** 11.2.10 - Modern touch slider
+- **AOS** 2.3.4 - Animate on scroll library
 
 ### Backend
-- **Supabase** - Backend as a Service
-- **PostgreSQL** - Database management
-- **Node.js/Express** - Email notification server
+- **Node.js** - JavaScript runtime
+- **Express.js** - Web application framework
 - **Nodemailer** - Email sending library
-
-### Development Tools
-- **ESLint** - Code linting and quality
-- **Axios** 1.11.0 - HTTP client
-- **Vite Plugin React** - React integration
-
-## 📁 Project Structure
-
-```
-YviSoft/
-├── public/                   # Static assets
-│   ├── images/              # Image assets
-│   └── videos/              # Video assets
-├── src/                     # Source code
-│   ├── components/          # React components
-│   │   ├── About/
-│   │   ├── Banner/
-│   │   ├── Contact Info & Form/
-│   │   ├── Footer/
-│   │   ├── Header/
-│   │   ├── Services/
-│   │   └── ...
-│   ├── config/              # Configuration files
-│   ├── services/            # Service files (email service)
-│   ├── styles/              # CSS and Sass files
-│   ├── assets/              # Frontend assets
-│   ├── App.jsx              # Main App component
-│   └── main.jsx             # Entry point
-├── server.js                # Email notification server
-├── package.json             # Frontend dependencies
-├── package-backend.json     # Backend dependencies
-├── vite.config.js           # Vite configuration
-├── eslint.config.js         # ESLint configuration
-└── README.md                # Project documentation
-```
+- **Supabase** - Backend-as-a-Service
+- **PostgreSQL** - Database management
 
 ## 🚀 Quick Start
 
 ### Prerequisites
-
-- **Node.js** (v18.0.0 or higher)
-- **npm** or **yarn**
-- **Supabase** account (for backend functionality)
+- Node.js (v18.0.0 or higher)
+- npm or yarn
+- Supabase account (for database functionality)
 
 ### Installation
 
 1. **Clone the repository**
    ```bash
    git clone <repository-url>
-   cd yvi-soft-redesign
+   cd yvi-soft
    ```
 
 2. **Install frontend dependencies**
    ```bash
+   cd frontend
    npm install
+   cd ..
    ```
 
-3. **Install missing dependencies** (if needed)
+3. **Install backend dependencies**
    ```bash
-   npm install aos
-   ```
-
-4. **Start development server**
-   ```bash
-   npm run dev
-   ```
-
-5. **Open in browser**
-   ```
-   http://localhost:5173
-   ```
-
-## 🔧 Available Scripts
-
-| Command | Description |
-|---------|-------------|
-| `npm run dev` | Start development server with HMR |
-| `npm run build` | Build for production |
-| `npm run preview` | Preview production build locally |
-| `npm run lint` | Run ESLint for code quality |
-| `npm run deploy` | Run deployment helper script |
-
-## 🗄️ Database Setup
-
-### Contact Form Database
-
-The contact form uses Supabase with PostgreSQL to store submissions. First, you'll need to set up a Supabase project and create the required table:
-
-1. Create a Supabase account at [supabase.com](https://supabase.com/)
-2. Create a new project
-3. Get your project URL and anon key from the project settings
-4. Create the contact_messages table:
-
-```sql
-CREATE TABLE contact_messages_new (
-  id SERIAL PRIMARY KEY,
-  name VARCHAR(100) NOT NULL,
-  email VARCHAR(150) NOT NULL,
-  company VARCHAR(100),
-  phone VARCHAR(20),
-  subject VARCHAR(200) DEFAULT 'No Subject',
-  message TEXT NOT NULL,
-  ip VARCHAR(45),
-  user_agent TEXT,
-  created_at TIMESTAMP DEFAULT NOW()
-);
-```
-
-5. Set up environment variables in your `.env` file:
-
-```env
-VITE_SUPABASE_URL=your_supabase_project_url
-VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
-```
-
-### Configuration
-
-Update Supabase credentials in `src/config/supabase.js` or use environment variables:
-
-```javascript
-const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || 'https://your-project.supabase.co'
-const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY || 'your-anon-key'
-```
-
-## 📧 Email Configuration
-
-### Backend Email Server
-
-The contact form now sends email notifications in addition to storing data in the database. To enable this functionality:
-
-1. **Install backend dependencies**:
-   ```bash
-   # Rename the backend package file
-   mv package-backend.json package.json
-   
-   # Install backend dependencies
+   cd backend
    npm install
+   cd ..
    ```
 
-2. **Configure email credentials**:
-   Create a `.env` file in the project root:
-   ```env
-   # Email Configuration
-   EMAIL_USER=contact@yvisoft.com
-   EMAIL_PASS=your_email_password
-   
-   # Server Configuration
-   PORT=3001
-   ```
+### Development
 
-3. **Start the email server**:
-   ```bash
-   # Start the email server
-   npm run start
-   
-   # Or for development with auto-restart
-   npm run dev
-   ```
+To run the complete application in development mode:
 
-4. **Configure Vite proxy**:
-   Update `vite.config.js` to proxy API requests to the email server:
-   ```javascript
-   import { defineConfig } from 'vite'
-   import react from '@vitejs/plugin-react'
-   
-   // https://vitejs.dev/config/
-   export default defineConfig({
-     plugins: [react()],
-     server: {
-       proxy: {
-         '/api': {
-           target: 'http://localhost:3001',
-           changeOrigin: true,
-           secure: false
-         }
-       }
-     }
-   })
-   ```
-
-### Email Service Options
-
-Popular email services that work well with this setup:
-- **GoDaddy SMTP** - Uses smtpout.secureserver.net with port 465
-- **SendGrid** - Reliable transactional email service
-- **Mailgun** - Feature-rich email platform
-- **Resend** - Developer-first email API
-
-For detailed setup instructions, see [EMAIL_SETUP_GUIDE.md](EMAIL_SETUP_GUIDE.md).
-
-## 🎨 Theme Customization
-
-The project supports 6 built-in color themes:
-
-- **Blue** (default)
-- **Green**
-- **Red**
-- **Orange**
-- **Purple**
-- **Pink**
-
-Themes are managed via CSS variables in the styles directory.
-
-## 🚀 Deployment
-
-### Production Build
-
-1. **Build the project**
-   ```bash
-   npm run build
-   ```
-
-2. **Set up Supabase**
-   - Create Supabase project
-   - Create contact_messages table
-   - Configure environment variables
-
-3. **Deploy the email server**
-   - Deploy the Node.js server to a hosting platform (e.g., Render, Heroku, DigitalOcean)
-   - Update the proxy configuration in `vite.config.js` to point to your deployed server
-
-### Hosting Options
-
-- **Frontend**: Vercel, Netlify, GitHub Pages, GoDaddy
-- **Backend**: Render, Heroku, DigitalOcean App Platform
-- **Database**: Supabase (already configured)
-
-### Deployment Guides
-
-For detailed deployment instructions, see:
-- [DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md) - General deployment instructions
-- [GODADDY_DEPLOYMENT_GUIDE.md](GODADDY_DEPLOYMENT_GUIDE.md) - Specific instructions for GoDaddy hosting
-
-You can also use the deployment helper script:
 ```bash
-npm run deploy
+# Start both frontend and backend simultaneously
+npm run dev
 ```
 
-## 📚 Additional Documentation
+Or start each component separately:
 
-- [DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md) - Detailed deployment instructions
-- [GODADDY_DEPLOYMENT_GUIDE.md](GODADDY_DEPLOYMENT_GUIDE.md) - GoDaddy-specific deployment guide
-- [SUPABASE_EMAIL_SETUP.md](SUPABASE_EMAIL_SETUP.md) - Alternative Supabase-based email solutions
-- [EMAIL_SETUP_GUIDE.md](EMAIL_SETUP_GUIDE.md) - Detailed email server setup guide
-- [SUPABASE_MIGRATION_SUMMARY.md](SUPABASE_MIGRATION_SUMMARY.md) - Summary of migration from PHP to Supabase
+1. **Start the backend server**
+   ```bash
+   cd backend
+   npm run dev
+   ```
+
+2. **In a separate terminal, start the frontend**
+   ```bash
+   cd frontend
+   npm run dev
+   ```
+
+### Access Points
+- **Frontend**: http://localhost:5173
+- **Backend API**: http://localhost:3001
+
+## 📁 Component Details
+
+### Frontend ([frontend/](file://c:\Users\sathi\OneDrive\Desktop\NextGen_AI\YviSoft\YviSoft\frontend))
+The frontend is a React application built with Vite, providing a modern, responsive user interface with:
+- 6 customizable color themes
+- Interactive components and animations
+- Responsive design for all device sizes
+- Contact form with real-time validation
+
+### Backend ([backend/](file://c:\Users\sathi\OneDrive\Desktop\NextGen_AI\YviSoft\YviSoft\backend))
+The backend is a Node.js/Express server that handles:
+- Email notifications via GoDaddy SMTP
+- Contact form data processing
+- API endpoints for frontend communication
+
+### Database ([Database/](file://c:\Users\sathi\OneDrive\Desktop\NextGen_AI\YviSoft\YviSoft\Database))
+Contains SQL scripts for setting up the Supabase PostgreSQL database:
+- Table creation scripts
+- Row Level Security policies
+- Database schema updates
+
+## 🎨 Features
+
+- **Responsive Design**: Works on all device sizes
+- **Multi-theme Support**: 6 color themes available
+- **Contact Form**: With validation and database storage
+- **Email Notifications**: Automated email responses
+- **Modern UI**: Smooth animations and transitions
+- **SEO Optimized**: Semantic HTML structure
+- **Performance Focused**: Vite-powered fast development
+
+## 📤 Deployment
+
+This project includes automated deployment scripts for deploying to GoDaddy hosting with VPS and cPanel.
+
+### Automated Deployment
+
+1. **Build and prepare for deployment**
+   ```bash
+   # Build frontend and prepare backend deployment package
+   npm run deploy
+   ```
+
+2. **Deploy components separately**
+   - Frontend: Upload contents of `frontend/dist/` to GoDaddy cPanel
+   - Backend: Upload contents of `yvi-soft-backend-deploy/` to GoDaddy VPS
+   - Database: Supabase (already configured)
+
+### Manual Deployment Steps
+
+#### Frontend Deployment (cPanel)
+
+1. **Build the frontend**
+   ```bash
+   npm run build:frontend
+   ```
+
+2. **Upload files to cPanel**
+   - Connect to cPanel File Manager or use FTP
+   - Upload all contents from `frontend/dist/` to your website root directory
+
+#### Backend Deployment (VPS)
+
+1. **Prepare backend deployment package**
+   ```bash
+   npm run deploy:backend
+   ```
+
+2. **Upload to VPS and configure**
+   - Upload contents of `yvi-soft-backend-deploy/` to your VPS
+   - Install dependencies and configure PM2
+   - Set up reverse proxy and SSL
+
+### Environment Configuration
+
+Set up environment variables in each component's `.env` file:
+- Frontend: Supabase credentials and backend URL
+- Backend: Email SMTP credentials
+
+#### Supabase Setup
+
+To enable the contact form functionality, you need to set up a Supabase project:
+
+1. Create a free account at [supabase.com](https://supabase.com/)
+2. Create a new project
+3. Get your Project URL and anon key from the API settings
+4. Update `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` in `frontend/.env`
+5. Run the SQL scripts in the [Database/](Database/) directory to create the contact form table
+
+For detailed instructions, see [SUPABASE_SETUP_GUIDE.md](documentation/SUPABASE_SETUP_GUIDE.md)
+
+### GoDaddy Deployment
+
+For complete deployment instructions to GoDaddy hosting with VPS and cPanel, see:
+- [DEPLOYMENT_README.md](DEPLOYMENT_README.md) - Complete deployment guide
+- [DEPLOYMENT_CHECKLIST.md](DEPLOYMENT_CHECKLIST.md) - Step-by-step checklist
+- [YVI_SOFT_GODADDY_DEPLOYMENT_PLAN.md](YVI_SOFT_GODADDY_DEPLOYMENT_PLAN.md) - Detailed deployment plan
+- [GODADDY_DEPLOYMENT_GUIDE.md](documentation/GODADDY_DEPLOYMENT_GUIDE.md) - Original GoDaddy deployment guide
+
+## 📚 Documentation
+
+Project documentation has been organized into a central [documentation/](documentation) directory:
+- [Documentation Directory](documentation)
+
+Each component also has its own README:
+- [Frontend Documentation](frontend/README.md)
+- [Backend Documentation](backend/README.md)
+- [Database Setup](Database/README.md)
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Commit your changes
+4. Push to the branch
+5. Create a Pull Request
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 📞 Support
+
+For support, contact:
+- Email: info@yvisoft.com
+- Phone: +91-8317622417

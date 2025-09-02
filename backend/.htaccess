@@ -1,0 +1,16 @@
+# Apache configuration for API routing
+RewriteEngine On
+
+# Handle API requests
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^api/send-email$ send-email.php [QSA,L]
+
+# Handle test API requests
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^api/test$ test-api-endpoint.php [QSA,L]
+
+# Handle preflight requests
+RewriteCond %{REQUEST_METHOD} OPTIONS
+RewriteRule ^(.*)$ $1 [R=200,L]

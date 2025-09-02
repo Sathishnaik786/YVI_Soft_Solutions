@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>API Test</title>
+    <script>
+        async function testEndpoint(endpoint) {
+            try {
+                const response = await fetch(`https://yvisoft.com/backend/api/${endpoint}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                const data = await response.json();
+                document.getElementById(`${endpoint}-result`).innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+            } catch (error) {
+                document.getElementById(`${endpoint}-result`).innerHTML = `<pre>Error: ${error.message}</pre>`;
+            }
+        }
+        
+        async function testEmailEndpoint() {
+            try {
+                const response = await fetch('https://yvisoft.com/backend/api/send-email', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        from: 'test@example.com',
+                        subject: 'Test Email',
+                        template: 'contact-form',
+                        data: {
+                            name: 'Test User',
+                            email: 'test@example.com',
+                            company: 'Test Company',
+                            phone: '123-456-7890',
+                            subject: 'Test Subject',
+                            message: 'This is a test message',
+                            ip: '127.0.0.1',
+                            userAgent: 'Test Browser',
+                            timestamp: new Date().toISOString()
+                        }
+                    })
+                });
+                const text = await response.text();
+                document.getElementById('send-email-result').innerHTML = `<pre>${text}</pre>`;
+            } catch (error) {
+                document.getElementById('send-email-result').innerHTML = `<pre>Error: ${error.message}</pre>`;
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>API Endpoint Tests</h1>
+    
+    <h2>Test API Endpoint</h2>
+    <button onclick="testEndpoint('test')">Test /api/test</button>
+    <div id="test-result">Click the button to test</div>
+    
+    <h2>Test Email Endpoint</h2>
+    <button onclick="testEmailEndpoint()">Test /api/send-email</button>
+    <div id="send-email-result">Click the button to test</div>
+</body>
+</html>
