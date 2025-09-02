@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "node start-dev.js",
     "start": "node server.js",
-    "build": "cd backend && npm install",
+    "build": "cd backend && npm install && npm install express",
     "build:frontend": "node build-frontend.js",
     "deploy:backend": "node deploy-backend.js",
     "deploy": "npm run build:frontend && npm run deploy:backend"
@@ -20,7 +20,6 @@
   "author": "YVI Soft Solutions",
   "license": "MIT",
   "dependencies": {
-    "express": "^4.18.2",
-    "http-proxy-middleware": "^2.0.6"
+    "express": "^4.18.2"
   }
 }
