@@ -31,9 +31,14 @@ app.get("/health", (req, res) => {
 // Allow requests only from your frontend domain
 const corsOptions = {
   origin: [
-    'https://yvisoft.com',        // Production frontend domain
-    'http://localhost:5173',      // Local development frontend
-    'http://localhost:3000'       // Alternative local development port
+    'https://yvisoft.com',              // Production frontend domain
+    'https://www.yvisoft.com',          // Production frontend domain with www
+    'https://yvi-soft-solutions.onrender.com', // Your actual Render deployment
+    'https://yvi-soft-email-server.onrender.com', // Alternative Render deployment
+    'http://localhost:5173',            // Local development frontend
+    'http://localhost:3000',            // Alternative local development port
+    'http://127.0.0.1:5173',            // Alternative localhost format
+    'http://127.0.0.1:3000'             // Alternative localhost format
   ],
   credentials: true,
   optionsSuccessStatus: 200
@@ -43,20 +48,20 @@ const corsOptions = {
 if (process.env.FRONTEND_URL) {
   corsOptions.origin.push(process.env.FRONTEND_URL);
 }
+
+// For development, be more permissive to avoid CORS issues
+if (process.env.NODE_ENV !== 'production') {
+  corsOptions.origin = true; // Allow all origins in development
+}
  
-// For production, remove localhost origins
-if (process.env.NODE_ENV === 'production') {
-  corsOptions.origin = corsOptions.origin.filter(origin => 
-    !origin.includes('localhost')
-  );
-  
-  // Add production frontend URL if it's a valid HTTPS URL
-  if (process.env.FRONTEND_URL && process.env.FRONTEND_URL.startsWith('https://')) {
-    corsOptions.origin.push(process.env.FRONTEND_URL);
-  }
-  
-  // Always allow the main domain
-  corsOptions.origin.push('https://yvisoft.com');
+// If FRONTEND_URL is set in environment variables, add it to allowed origins
+if (process.env.FRONTEND_URL) {
+  corsOptions.origin.push(process.env.FRONTEND_URL);
+}
+ 
+// For development, be more permissive to avoid CORS issues
+if (process.env.NODE_ENV !== 'production') {
+  corsOptions.origin = true; // Allow all origins in development
 }
 
 app.use(cors(corsOptions));

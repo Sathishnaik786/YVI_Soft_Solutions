@@ -11,3 +11,5 @@ services:
         sync: false
       - key: PORT
         value: "3001"
+      - key: FRONTEND_URL
+        value: "https://yvi-soft-solutions.onrender.com"

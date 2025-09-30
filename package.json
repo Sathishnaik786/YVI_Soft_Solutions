@@ -8,15 +8,19 @@
     "start": "cd backend && node server.js",
     "dev": "node start-dev.js",
     "build": "cd backend && npm install",
-    "build:frontend": "node build-frontend.js",
+    "build:frontend": "cd frontend && npm run build",
     "deploy:backend": "node deploy-backend.js",
-    "deploy": "npm run build:frontend && npm run deploy:backend"
+    "deploy:frontend": "node deploy-frontend.js",
+    "deploy": "npm run build:frontend && npm run deploy:frontend",
+    "deploy:full": "node deploy-full.js",
+    "test:connection": "node test-frontend-backend.js"
   },
   "dependencies": {
     "express": "^4.21.2",
     "cors": "^2.8.5",
     "nodemailer": "^6.9.16",
-    "dotenv": "^16.4.7"
+    "dotenv": "^16.4.7",
+    "node-fetch": "^3.3.2"
   },
   "keywords": [
     "react",
