@@ -5,7 +5,7 @@
   "main": "server.js",
   "type": "module",
   "scripts": {
-    "start": "cd backend && node server.js",
+    "start": "cd backend && npm start",
     "dev": "node start-dev.js",
     "build": "cd backend && npm install",
     "build:frontend": "cd frontend && npm run build",
@@ -16,10 +16,6 @@
     "test:connection": "node test-frontend-backend.js"
   },
   "dependencies": {
-    "express": "^4.21.2",
-    "cors": "^2.8.5",
-    "nodemailer": "^6.9.16",
-    "dotenv": "^16.4.7",
     "node-fetch": "^3.3.2"
   },
   "keywords": [
